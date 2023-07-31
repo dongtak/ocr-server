@@ -28,7 +28,10 @@ $.ajax({
     <input type="radio" name="language" value="jpn" id="jpn-radio">
     <label for="jpn-radio">Japnanese</label>
             <button id="text-transfer">텍스트변환</button>
-            <div id="image-text"></div>
+            <div id="image-text">
+            <textarea id="content" name="content" readonly></textarea>
+            </div>
+            
             `);
     }
 

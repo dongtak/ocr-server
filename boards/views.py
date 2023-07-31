@@ -12,7 +12,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from pyuploadcare import Uploadcare, File
 import subprocess
 from django.http import JsonResponse
-
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 def board_list_view(request):
     return render(request, 'board_list.html')
@@ -113,34 +114,82 @@ class BoardDetail(APIView):
     
 
 
-def extract_text_from_image(request):
-    if request.method == 'POST':
-        image_url = request.POST.get('image_url', '')
-        language = request.POST.get('language', 'eng') 
-        try:
-       
-            tesseract_cmd = f'tesseract "{image_url}" stdout -l {language}'
 
-            process = subprocess.Popen(
-                tesseract_cmd,
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
-            )
-      
-            stdout, stderr = process.communicate()
+import pytesseract
+from django.http import JsonResponse
 
-            extracted_text = stdout.decode().strip()
-            error_message = stderr.decode().strip()
 
-            if error_message:
-                return JsonResponse({'error': error_message}, status=500)
 
-            return JsonResponse({'text': extracted_text})
 
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
 
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+
+# @csrf_exempt
+# def extract_text(request):
+#     image_url = request.POST.get('image_url', '')
+#     language = request.POST.get('language', '')
+
+#     # Replace '/path/to/tesseract' with the actual path to the Tesseract executable
+#     tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+#     # Run Tesseract command with subprocess and capture the output
+#     result = subprocess.run([tesseract_cmd, image_url, 'stdout', '-l', language], capture_output=True, text=True)
+
+#     # Check if the Tesseract command was successful
+#     if result.returncode == 0:
+#         extracted_text = result.stdout
+#     else:
+#         # If there was an error, return an error message
+#         return JsonResponse({'error': 'Failed to extract text using Tesseract'})
+
+#     return JsonResponse({'text': extracted_text})
+
+
+
+
+
+@csrf_exempt
+def extract_text(request):
+    image_url = request.POST.get('image_url', '')
+    language = request.POST.get('language', '')
+
+    # Replace '/path/to/tesseract' with the actual path to the Tesseract executable
+    tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+    # Replace '/path/to/output' with the desired path to save the extracted text
+    output_file = r'C:\Users\Administrator\Documents\python\ocr-server\boards\output'
+
+    # Run Tesseract command with subprocess
+    # subprocess.run([tesseract_cmd, image_url, output_file, '-l', language], check=True)
+    subprocess.run([tesseract_cmd, image_url, output_file, '-l', language], check=True, capture_output=True)
     
+    # Read the extracted text from the output file with 'utf-8' encoding
+    with open(output_file, 'r', encoding='utf-8') as file:
+        extracted_text = file.read()
+
+    return JsonResponse({'text': extracted_text})
+
+
+
+# from PIL import Image
+# from io import BytesIO
+
+# @csrf_exempt
+# def extract_text(request):
+#     image_url = request.POST.get('image_url', '')
+#     language = request.POST.get('language', '')
+
+#     # Replace '/path/to/tesseract' with the actual path to the Tesseract executable
+#     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+#     # Download the image from the provided URL and convert it to PIL Image
+#     try:
+#         response = requests.get(image_url)
+#         image = Image.open(BytesIO(response.content))
+#     except Exception as e:
+#         return JsonResponse({'error': str(e)})
+
+#     # Perform text extraction using pytesseract
+#     extracted_text = pytesseract.image_to_string(image, lang=language)
+
+#     return JsonResponse({'text': extracted_text})
