@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style/form.css' %}">
+    <style>
+        footer{
+            bottom: auto !important;
+        }
+    </style>
+</head>
+    {% include 'header.html' %}
+
+<body>
+    <section>
+        <h2>게시글</h2>
+        <div id="board-contents">
+            <input type="text" id="title" name="title" readonly>
+            <p type="text" id="author"></p>
+            <div id="image-container">
+                
+            </div>
+            <textarea id="content" name="content" readonly></textarea>
+            <input type="datetime" id="created_at" readonly>
+            <input type="datetime" id="modified_at" readonly>
+        </div>
+    </section>
+    <script src="{% static 'script/board-api.js' %}"></script>
+</body>
+{% include 'footer.html' %}
+
+</html>

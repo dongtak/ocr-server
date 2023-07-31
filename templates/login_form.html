@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'script/csrf.js' %}"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    {%include 'header.html'%}
+    <section>
+        <div>
+            <h2>로그인</h2>
+            <form>
+                <input type="text" id="username" name="username" placeholder="username">
+                <input type="password" id="password" name="password" placeholder="password">
+                <input type="button" value="로그인" onclick="login()">
+            </form>
+        </div>
+
+    </section>
+    {%include 'footer.html'%}
+
+</body>
+<script src="{% static 'script/log-api.js' %}"></script>
+</html>

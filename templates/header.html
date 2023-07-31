@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static '/style/form.css' %}">
+    <link rel="stylesheet" href="{% static '/style/grid.css' %}">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="http://127.0.0.1:8000/">
+                ORM
+            </a>
+        </div>
+        <div class="header_screen">
+            <div class="marquee">HEADER</div>
+            <div class="marquee">HEADER</div>
+            <div class="marquee">HEADER</div>
+
+        </div>
+
+        <div class="nav">
+            <a href="login">LOGIN</a>
+            <a href="join">JOIN</a>
+        </div>
+
+    </header>
+</body>
+
+</html>
