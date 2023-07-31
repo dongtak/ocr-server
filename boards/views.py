@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render
 from django.http.response import HttpResponse
 from django.conf import settings
@@ -9,8 +10,8 @@ from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound,PermissionDenied
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from pyuploadcare import Uploadcare, File
-
-
+import subprocess
+from django.http import JsonResponse
 
 
 def board_list_view(request):
@@ -57,8 +58,12 @@ class Boards(APIView):
                     image_url = f"https://ucarecdn.com/{ucare_file.uuid}/"
                     board.image_url = image_url
 
+            
             board.author = request.user
             board.save()
+            
+            if os.path.isfile(board.file.path) :
+                os.remove(board.file.path)
 
             return Response(BoardSerializer(board).data)
         return Response(serializer.errors)
@@ -105,3 +110,37 @@ class BoardDetail(APIView):
         board = self.get_object(pk)
         board.delete()
         return Response({})
+    
+
+
+def extract_text_from_image(request):
+    if request.method == 'POST':
+        image_url = request.POST.get('image_url', '')
+        language = request.POST.get('language', 'eng') 
+        try:
+       
+            tesseract_cmd = f'tesseract "{image_url}" stdout -l {language}'
+
+            process = subprocess.Popen(
+                tesseract_cmd,
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+      
+            stdout, stderr = process.communicate()
+
+            extracted_text = stdout.decode().strip()
+            error_message = stderr.decode().strip()
+
+            if error_message:
+                return JsonResponse({'error': error_message}, status=500)
+
+            return JsonResponse({'text': extracted_text})
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+    

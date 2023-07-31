@@ -26,6 +26,7 @@ urlpatterns = [
     path('',include("ocr.urls")),
     path('api/v1/boards/', include("boards.urls")),
     path('api/v1/users/', include("users.urls")),
+  
 ]
 
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

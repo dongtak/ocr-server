@@ -4,8 +4,13 @@ $.ajax({
     "timeout": 0,
 }).done(function (list) {
     list.forEach(board => {
+
         image_url = 'media/tvPWB89.webp';
-        image_url = board.file === null ? image_url : board.file;
+
+        if (board.image_url !== null && board.image_url !== '') {
+            image_url = board.image_url;
+        }
+    
         
         $('#boards-container').append(`
         <div class="board">

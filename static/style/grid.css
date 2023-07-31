@@ -38,6 +38,7 @@ header,footer{
     width: 100%;
     text-align: center;
     overflow: hidden;
+    line-height: 100px;
     
 }
 header a {
@@ -55,10 +56,16 @@ header .header_screen{
     position: absolute;
     right: 0;
  }
+ 
+ .logo{
+    position: absolute;
+    z-index: 999;
+ }
   .logo a{
-    display: inline;
+    display: inline-block;
     background: #ffffff;
     height: 100px;
+    line-height: 100px;
     width: 100px;
   }
 footer{

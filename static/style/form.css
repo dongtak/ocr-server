@@ -22,7 +22,11 @@
   
 }
 
-
+.box {
+    display: grid;
+    grid-template-columns: 2fr 8fr;
+    height: 100%;
+}
 .board img{
 width: 100%;
 height: 100%;
@@ -43,4 +47,30 @@ border: 1px solid black;
 }
 .join-form input[type=text],input[type=password] { 
 width: 80%;
+}
+
+.my-page-section{
+    background: #4e4e4e;
+    height: 100%;
+}
+
+ul,li,a {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
+.aside a{
+    display: inline-block;    
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+
+.main-section{
+    min-height: 400px;
+    max-height: 600px;
+    text-align: center;
 }
